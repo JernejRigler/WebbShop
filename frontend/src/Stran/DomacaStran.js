@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import data from '../data';
 
 function DomacaStran() {
@@ -7,13 +8,13 @@ function DomacaStran() {
       <div className="seznamIzdelkov">
         {data.izdelki.map((izdelek) => (
           <div className="izdelek" key={izdelek.alt}>
-            <a href={`/product/${izdelek.alt}`}>
+            <Link to={`/izdelek/${izdelek.alt}`}>
               <img src={izdelek.slika} alt={izdelek.imeIzdelka} />
-            </a>
+            </Link>
             <div className="imeCena">
-              <a href={`/product/${izdelek.alt}`}>
+              <Link to={`/izdelek/${izdelek.alt}`}>
                 <p>{izdelek.imeIzdelka}</p>
-              </a>
+              </Link>
               <p>{izdelek.cena}</p>
               <button>V košarico</button>
             </div>

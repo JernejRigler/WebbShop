@@ -1,17 +1,18 @@
-//import data from './data';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import DomacaStran from './Stran/DomacaStran';
+import StranIzdelka from './Stran/StranIzdelka';
 function App() {
   return (
     <BrowserRouter>
       <div>
         <header>
-          <a id="Naslov" href="\">
+          <Link id="Naslov" to="/">
             WebbShop
-          </a>
+          </Link>
         </header>
         <main>
           <Routes>
+            <Route path="/izdelek/:alt" element={<StranIzdelka />} />
             <Route path="/" element={<DomacaStran />} />
           </Routes>
         </main>
