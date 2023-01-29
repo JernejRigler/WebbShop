@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
+import Nalaganje from '../Komponente/Nalaganje';
+import Sporocilo from '../Komponente/Sporocilo';
 
 const reducer = (stanje, akcija) => {
   switch (akcija.tip) {
@@ -46,9 +48,9 @@ function StranIzdelka() {
   }, [alt]);
 
   return nalaganje ? (
-    <div>Nalaganje...</div>
+    <Nalaganje />
   ) : error ? (
-    <div>{error}</div>
+    <Sporocilo tip="danger">{error}</Sporocilo>
   ) : (
     <div className="mt-3">
       <Row>

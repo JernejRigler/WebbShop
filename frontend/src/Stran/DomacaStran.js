@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Izdelek from '../Komponente/Izdelek';
 import { Helmet } from 'react-helmet-async';
+import Nalaganje from '../Komponente/Nalaganje';
+import Sporocilo from '../Komponente/Sporocilo';
 //import data from '../data';
 
 const reducer = (stanje, akcija) => {
@@ -49,9 +51,9 @@ function DomacaStran() {
       <h1>Priporočeni izdelki</h1>
       <div className="seznamIzdelkov">
         {nalaganje ? (
-          <div>Nalaganje...</div>
+          <Nalaganje />
         ) : error ? (
-          <div>{error}</div>
+          <Sporocilo tip="danger">{error}</Sporocilo>
         ) : (
           <Row>
             {izdelki.map((izdelek) => (
