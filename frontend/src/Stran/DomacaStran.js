@@ -1,7 +1,9 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logger from 'use-reducer-logger';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Izdelek from '../Komponente/Izdelek';
 //import data from '../data';
 
 const reducer = (stanje, akcija) => {
@@ -47,20 +49,13 @@ function DomacaStran() {
         ) : error ? (
           <div>{error}</div>
         ) : (
-          izdelki.map((izdelek) => (
-            <div className="izdelek" key={izdelek.alt}>
-              <Link to={`/izdelek/${izdelek.alt}`}>
-                <img src={izdelek.slika} alt={izdelek.imeIzdelka} />
-              </Link>
-              <div className="imeCena">
-                <Link to={`/izdelek/${izdelek.alt}`}>
-                  <p>{izdelek.imeIzdelka}</p>
-                </Link>
-                <p>{izdelek.cena}</p>
-                <button>V košarico</button>
-              </div>
-            </div>
-          ))
+          <Row>
+            {izdelki.map((izdelek) => (
+              <Col sm={6} md={4} lg={3} className="mb-3">
+                <Izdelek izdelek={izdelek}></Izdelek>
+              </Col>
+            ))}
+          </Row>
         )}
       </div>
     </div>

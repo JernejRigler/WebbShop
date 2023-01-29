@@ -19,6 +19,12 @@ main {
   flex-flow: row wrap;
   justify-content: space-evenly;
 }
+.btn-primary {
+  background-color: black;
+}
+.btn-primary:hover {
+  background-color: #202020;
+}
 
 .izdelek {
   border: 2px solid black;
@@ -30,7 +36,7 @@ main {
   width: 100%;
 }
 
-.imeCena {
+/*.imeCena {
   transition: background-color 0.3s;
 }
 
@@ -48,4 +54,4 @@ main {
 }
 .imeCena > a:hover {
   color: slategray;
-}
+}*/
