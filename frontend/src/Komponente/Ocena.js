@@ -57,7 +57,7 @@ function Ocena(poslano) {
           }
         ></i>
       </span>
-      <span>({steviloOcen})</span>
+      <span>({steviloOcen} ocen)</span>
     </div>
   );
 }

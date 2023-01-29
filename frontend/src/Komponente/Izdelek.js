@@ -18,7 +18,7 @@ function Izdelek(poslano) {
           <Card.Title>{izdelek.imeIzdelka}</Card.Title>
         </Link>
         <Ocena ocena={izdelek.ocena} steviloOcen={izdelek.steviloOcen}></Ocena>
-        <Card.Text>${izdelek.cena}</Card.Text>
+        <Card.Text>{izdelek.cena}€</Card.Text>
         <Button>V košarico</Button>
       </Card.Body>
     </Card>

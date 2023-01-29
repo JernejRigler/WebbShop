@@ -13,7 +13,7 @@ function App() {
           <Navbar bg="dark" variant="dark">
             <Container>
               <LinkContainer to="/">
-                <Navbar.Brand>Webbshop</Navbar.Brand>
+                <Navbar.Brand>WebbShop</Navbar.Brand>
               </LinkContainer>
             </Container>
           </Navbar>

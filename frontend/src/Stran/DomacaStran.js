@@ -4,6 +4,7 @@ import logger from 'use-reducer-logger';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Izdelek from '../Komponente/Izdelek';
+import { Helmet } from 'react-helmet-async';
 //import data from '../data';
 
 const reducer = (stanje, akcija) => {
@@ -42,6 +43,9 @@ function DomacaStran() {
   }, []);
   return (
     <div>
+      <Helmet>
+        <title>{'WebbShop'}</title>
+      </Helmet>
       <h1>Priporočeni izdelki</h1>
       <div className="seznamIzdelkov">
         {nalaganje ? (

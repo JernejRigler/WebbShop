@@ -35,7 +35,17 @@ main {
 .izdelek img {
   width: 100%;
 }
-
+.img-large {
+  max-width: 100%;
+}
+.font-weight-bold {
+  font-weight: bold;
+  font-size: 2.5vh;
+}
+.cenaIzdelka {
+  font-weight: bolder;
+  font-size: 4vh;
+}
 /*.imeCena {
   transition: background-color 0.3s;
 }
