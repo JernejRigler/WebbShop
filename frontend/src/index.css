@@ -6,19 +6,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.container-stran {
+  min-height: 100vh;
+}
 
 main {
-  margin: 1rem;
-}
-header {
-  background-color: black;
-  padding: 1rem;
-}
-
-#Naslov {
-  font-weight: bold;
-  text-decoration: underline;
-  color: white;
+  flex: 1;
 }
 
 .seznamIzdelkov {
