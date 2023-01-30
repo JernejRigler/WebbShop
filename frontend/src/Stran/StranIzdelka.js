@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
 import Nalaganje from '../Komponente/Nalaganje';
 import Sporocilo from '../Komponente/Sporocilo';
+import dobiError from '../Errorji';
 
 const reducer = (stanje, akcija) => {
   switch (akcija.tip) {
@@ -41,7 +42,7 @@ function StranIzdelka() {
         const odgovor = await axios.get(`/api/izdelki/alt/${alt}`);
         nalozi({ tip: 'FETCH_SUCCESS', payload: odgovor.data });
       } catch (err) {
-        nalozi({ tip: 'FETCH_FAIL', payload: err.message });
+        nalozi({ tip: 'FETCH_FAIL', payload: dobiError(err) });
       }
     };
     dobiPodatke();
