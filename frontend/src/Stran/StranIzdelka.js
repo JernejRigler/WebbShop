@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,6 +12,7 @@ import { Helmet } from 'react-helmet-async';
 import Nalaganje from '../Komponente/Nalaganje';
 import Sporocilo from '../Komponente/Sporocilo';
 import dobiError from '../Errorji';
+import { Shramba } from '../Shramba';
 
 const reducer = (stanje, akcija) => {
   switch (akcija.tip) {
@@ -47,6 +48,14 @@ function StranIzdelka() {
     };
     dobiPodatke();
   }, [alt]);
+
+  const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
+  const dodajVKosaricoHander = () => {
+    ctxNalozi({
+      tip: 'KOSARICA_DODAJ_IZDELEK',
+      payload: { ...izdelek, kolicina: 1 },
+    });
+  };
 
   return nalaganje ? (
     <Nalaganje />
@@ -96,9 +105,8 @@ function StranIzdelka() {
             </ListGroup.Item>
             {izdelek.zaloga > 0 && (
               <ListGroup.Item>
-                <Button variant="primary">
-                  Dodaj v košarico&nbsp;
-                  <i className="fa-solid fa-cart-shopping"></i>
+                <Button onClick={dodajVKosaricoHander} variant="primary">
+                  Dodaj v kosarico
                 </Button>
               </ListGroup.Item>
             )}

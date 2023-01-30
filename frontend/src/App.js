@@ -2,10 +2,17 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import DomacaStran from './Stran/DomacaStran';
 import StranIzdelka from './Stran/StranIzdelka';
 import Navbar from 'react-bootstrap/Navbar';
+import Badge from 'react-bootstrap/Badge';
+import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useContext } from 'react';
+import { Shramba } from './Shramba';
 
 function App() {
+  const { stanje } = useContext(Shramba);
+  const { kosarica } = stanje;
+
   return (
     <BrowserRouter>
       <div className="d-flex flex-column container-stran">
@@ -15,6 +22,16 @@ function App() {
               <LinkContainer to="/">
                 <Navbar.Brand>WebbShop</Navbar.Brand>
               </LinkContainer>
+              <Nav className="me-auto">
+                <Link to="/kosarica" className="nav-link">
+                  Kosarica
+                  {kosarica.izdelkiKosarice.length > 0 && (
+                    <Badge pill bg="primary">
+                      {kosarica.izdelkiKosarice.length}
+                    </Badge>
+                  )}
+                </Link>
+              </Nav>
             </Container>
           </Navbar>
         </header>
