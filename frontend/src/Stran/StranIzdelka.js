@@ -50,10 +50,21 @@ function StranIzdelka() {
   }, [alt]);
 
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
-  const dodajVKosaricoHander = () => {
+  const { kosarica } = stanje;
+  const dodajVKosaricoHander = async () => {
+    const obstajaVKosarici = kosarica.izdelkiKosarice.find(
+      (x) => x._id === izdelek._id
+    );
+    const kolicina = obstajaVKosarici ? obstajaVKosarici.kolicina + 1 : 1;
+    const { data } = await axios.get(`/api/izdelki/${izdelek._id}`);
+    if (data.zaloga < kolicina) {
+      window.alert('Izdelek izven zaloge');
+      return;
+    }
+
     ctxNalozi({
       tip: 'KOSARICA_DODAJ_IZDELEK',
-      payload: { ...izdelek, kolicina: 1 },
+      payload: { ...izdelek, kolicina },
     });
   };
 
@@ -77,7 +88,7 @@ function StranIzdelka() {
             ocena={izdelek.ocena}
             steviloOcen={izdelek.steviloOcen}
           ></Ocena>
-          <div>Stevilka:{izdelek.sifraIzdelka}</div>
+          <div>Stevilka:{izdelek._id}</div>
           <img
             className="img-large"
             src={izdelek.slika}

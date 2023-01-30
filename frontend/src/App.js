@@ -27,7 +27,10 @@ function App() {
                   Kosarica
                   {kosarica.izdelkiKosarice.length > 0 && (
                     <Badge pill bg="primary">
-                      {kosarica.izdelkiKosarice.length}
+                      {kosarica.izdelkiKosarice.reduce(
+                        (a, c) => a + c.kolicina,
+                        0
+                      )}
                     </Badge>
                   )}
                 </Link>
