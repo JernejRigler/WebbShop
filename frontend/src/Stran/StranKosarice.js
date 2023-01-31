@@ -60,7 +60,7 @@ export default function StranKosarice() {
                         alt={izdelek.imeIzdelka}
                         className="img-fluid rounded img-kosarica"
                       ></img>{' '}
-                      <Link to={`/izdelki/${izdelek.alt}`}>
+                      <Link to={`/izdelek/${izdelek.alt}`}>
                         {izdelek.imeIzdelka}
                       </Link>
                     </Col>

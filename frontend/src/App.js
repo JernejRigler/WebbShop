@@ -9,6 +9,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useContext } from 'react';
 import { Shramba } from './Shramba';
 import StranKosarice from './Stran/StranKosarice';
+import PrijavnaStran from './Stran/PrijavnaStran';
 
 function App() {
   const { stanje } = useContext(Shramba);
@@ -44,6 +45,7 @@ function App() {
             <Routes>
               <Route path="/izdelek/:alt" element={<StranIzdelka />} />
               <Route path="/" element={<DomacaStran />} />
+              <Route path="/prijava" element={<PrijavnaStran />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>

@@ -49,6 +49,9 @@ main {
 .img-kosarica {
   height: 100px;
 }
+.prijavniObrazec {
+  max-width: 600px;
+}
 /*.imeCena {
   transition: background-color 0.3s;
 }
