@@ -4,7 +4,9 @@ export const Shramba = createContext();
 
 const prvotnoStanje = {
   kosarica: {
-    izdelkiKosarice: [],
+    izdelkiKosarice: localStorage.getItem('izdelkiKosarice')
+      ? JSON.parse(localStorage.getItem('izdelkiKosarice'))
+      : [],
   },
 };
 function reducer(stanje, akcija) {
@@ -19,10 +21,18 @@ function reducer(stanje, akcija) {
             izdelek._id === obstajaIzdelek._id ? novIzdelek : izdelek
           )
         : [...stanje.kosarica.izdelkiKosarice, novIzdelek];
+      localStorage.setItem('izdelkiKosarice', JSON.stringify(izdelkiKosarice));
       return {
         ...stanje,
         kosarica: { ...stanje.kosarica, izdelkiKosarice },
       };
+    case 'KOSARICA_IZBRISI_IZDELEK': {
+      const izdelkiKosarice = stanje.kosarica.izdelkiKosarice.filter(
+        (izdelek) => izdelek._id !== akcija.payload._id
+      );
+      localStorage.setItem('izdelkiKosarice', JSON.stringify(izdelkiKosarice));
+      return { ...stanje, kosarica: { ...stanje.kosarica, izdelkiKosarice } };
+    }
     default:
       return stanje;
   }

@@ -4,16 +4,39 @@ import Row from 'react-bootstrap/esm/Row';
 import { Helmet } from 'react-helmet-async';
 import { Shramba } from '../Shramba';
 import Sporocilo from '../Komponente/Sporocilo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import axios from 'axios';
 
 export default function StranKosarice() {
+  let navigiraj = useNavigate();
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
   const {
     kosarica: { izdelkiKosarice },
   } = stanje;
+
+  const posodobiKosaricoHandler = async (izdelek, kolicina) => {
+    const { data } = await axios.get(`/api/izdelki/${izdelek._id}`);
+    if (data.zaloga < kolicina) {
+      window.alert('Izdelek izven zaloge');
+      return;
+    }
+
+    ctxNalozi({
+      tip: 'KOSARICA_DODAJ_IZDELEK',
+      payload: { ...izdelek, kolicina },
+    });
+  };
+
+  const izbrisiIzdelekHandler = (izdelek) => {
+    ctxNalozi({ tip: 'KOSARICA_IZBRISI_IZDELEK', payload: izdelek });
+  };
+
+  const naBlagajnoHandler = () => {
+    navigiraj('/prijava?redirect=/dostava');
+  };
   return (
     <div>
       <Helmet>
@@ -42,7 +65,13 @@ export default function StranKosarice() {
                       </Link>
                     </Col>
                     <Col md={2}>
-                      <Button variant="light" disabled={izdelek.kolicina === 1}>
+                      <Button
+                        variant="light"
+                        onClick={() =>
+                          posodobiKosaricoHandler(izdelek, izdelek.kolicina - 1)
+                        }
+                        disabled={izdelek.kolicina === 1}
+                      >
                         <i className="fa-solid fa-circle-minus"></i>
                       </Button>{' '}
                       <span className="font-weight-bold">
@@ -50,6 +79,9 @@ export default function StranKosarice() {
                       </span>
                       <Button
                         variant="light"
+                        onClick={() =>
+                          posodobiKosaricoHandler(izdelek, izdelek.kolicina + 1)
+                        }
                         disabled={izdelek.kolicina === izdelek.zaloga}
                       >
                         <i className="fa-solid fa-circle-plus"></i>
@@ -57,7 +89,10 @@ export default function StranKosarice() {
                     </Col>
                     <Col md={1}>{izdelek.cena} €</Col>
                     <Col md={1}>
-                      <Button variant="light">
+                      <Button
+                        variant="light"
+                        onClick={() => izbrisiIzdelekHandler(izdelek)}
+                      >
                         <i className="fa-regular fa-circle-xmark"></i>
                       </Button>
                     </Col>
@@ -81,6 +116,7 @@ export default function StranKosarice() {
             <Button
               type="button"
               variant="dark"
+              onClick={naBlagajnoHandler}
               disabled={izdelkiKosarice.length === 0}
             >
               Naslednji korak
