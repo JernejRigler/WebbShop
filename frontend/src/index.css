@@ -46,6 +46,9 @@ main {
   font-weight: bolder;
   font-size: 4vh;
 }
+.img-kosarica {
+  height: 100px;
+}
 /*.imeCena {
   transition: background-color 0.3s;
 }

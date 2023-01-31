@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useContext, useEffect, useReducer } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -28,6 +28,7 @@ const reducer = (stanje, akcija) => {
 };
 
 function StranIzdelka() {
+  let navigiraj = useNavigate();
   let params = useParams();
   let { alt } = params;
 
@@ -66,6 +67,7 @@ function StranIzdelka() {
       tip: 'KOSARICA_DODAJ_IZDELEK',
       payload: { ...izdelek, kolicina },
     });
+    navigiraj('/kosarica');
   };
 
   return nalaganje ? (
