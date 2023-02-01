@@ -108,7 +108,10 @@ export default function StranKosarice() {
               Znesek košarice (
               {izdelkiKosarice.reduce((a, c) => a + c.kolicina, 0)} izdelkov):{' '}
               <h2 className="d-inline">
-                {izdelkiKosarice.reduce((a, c) => a + c.cena * c.kolicina, 0)} €
+                {izdelkiKosarice
+                  .reduce((a, c) => a + c.cena * c.kolicina, 0)
+                  .toFixed(2)}{' '}
+                €
               </h2>
             </h3>
           </Col>

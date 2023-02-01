@@ -1,5 +1,18 @@
 import express from 'express';
 import data from './data.js';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('uspesna povezava z bazo');
+  })
+  .catch((err) => {
+    console.log('Napaka' + err.message);
+  });
 
 const app = express();
 app.get('/api/izdelki', (req, res) => {
