@@ -1,4 +1,19 @@
+import bcrypt from 'bcryptjs';
 let data = {
+  uporabniki: [
+    {
+      imeUporabnika: 'Jernej',
+      email: 'admin@neki.com',
+      geslo: bcrypt.hashSync('1234'),
+      praviceAdmina: true,
+    },
+    {
+      imeUporabnika: 'Mark',
+      email: 'markec@neki.com',
+      geslo: bcrypt.hashSync('1234'),
+      praviceAdmina: false,
+    },
+  ],
   izdelki: [
     {
       imeIzdelka: 'Samsung Galaxy Z Fold3 mobilni telefon 12 GB/256 GB',
