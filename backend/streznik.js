@@ -2,6 +2,8 @@ import express from 'express';
 import data from './data.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import seedUsmerjevalnik from './usmeritve/seedUsmeritve.js';
+import izdelekUsmerjevalnik from './usmeritve/izdelekUsmeritve.js';
 
 dotenv.config();
 
@@ -15,27 +17,10 @@ mongoose
   });
 
 const app = express();
-app.get('/api/izdelki', (req, res) => {
-  res.send(data.izdelki);
-});
 
-app.get('/api/izdelki/alt/:alt', (req, res) => {
-  const izdelek = data.izdelki.find((x) => x.alt === req.params.alt);
-  if (izdelek) {
-    res.send(izdelek);
-  } else {
-    res.status(404).send({ message: 'Stran ali izdelek ne obstaja' });
-  }
-});
+app.use('/api/seed', seedUsmerjevalnik);
 
-app.get('/api/izdelki/:id', (req, res) => {
-  const izdelek = data.izdelki.find((x) => x._id === req.params.id);
-  if (izdelek) {
-    res.send(izdelek);
-  } else {
-    res.status(404).send({ message: 'Stran ali izdelek ne obstaja' });
-  }
-});
+app.use('/api/izdelki', izdelekUsmerjevalnik);
 
 const vrata = process.env.PORT || 5000;
 app.listen(vrata, () => {

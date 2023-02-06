@@ -2,7 +2,7 @@ let data = {
   izdelki: [
     {
       imeIzdelka: 'Samsung Galaxy Z Fold3 mobilni telefon 12 GB/256 GB',
-      _id: '100001',
+      //_id: '100001',
       cena: 1799.99,
       kategorijaIzdelka: 'Telefoni',
       alt: 'samsung-galaxy-z-fold3-mobilni-telefon-12-GB-256-GB',
@@ -15,7 +15,7 @@ let data = {
     },
     {
       imeIzdelka: 'realme C11 2021 mobilni telefon 2GB/32GB moder',
-      _id: '100002',
+      //_id: '100002',
       cena: 99.99,
       kategorijaIzdelka: 'Telefoni',
       alt: 'realme-c11-2021-mobilni-telefon-2-GB-32-GB-moder',
@@ -28,7 +28,7 @@ let data = {
     },
     {
       imeIzdelka: 'Lenovo Tab M10 Plus G3 tablični računalnik',
-      _id: '100003',
+      //_id: '100003',
       cena: 250.79,
       kategorijaIzdelka: 'Tablice',
       alt: 'lenovo-tab-m10-plus-g3-tablicni-racunalnik',
