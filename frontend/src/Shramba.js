@@ -3,6 +3,9 @@ import { createContext, useReducer } from 'react';
 export const Shramba = createContext();
 
 const prvotnoStanje = {
+  podatkiUporabnika: localStorage.getItem('podatkiUporabnika')
+    ? JSON.parse(localStorage.getItem('podatkiUporabnika'))
+    : null,
   kosarica: {
     izdelkiKosarice: localStorage.getItem('izdelkiKosarice')
       ? JSON.parse(localStorage.getItem('izdelkiKosarice'))
@@ -33,6 +36,13 @@ function reducer(stanje, akcija) {
       localStorage.setItem('izdelkiKosarice', JSON.stringify(izdelkiKosarice));
       return { ...stanje, kosarica: { ...stanje.kosarica, izdelkiKosarice } };
     }
+    case 'UPORABNIK_PRIJAVA':
+      return { ...stanje, podatkiUporabnika: akcija.payload };
+    case 'UPORABNIK_ODJAVA':
+      return {
+        ...stanje,
+        podatkiUporabnika: null,
+      };
     default:
       return stanje;
   }

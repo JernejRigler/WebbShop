@@ -4,6 +4,7 @@ import StranIzdelka from './Stran/StranIzdelka';
 import Navbar from 'react-bootstrap/Navbar';
 import Badge from 'react-bootstrap/Badge';
 import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useContext } from 'react';
@@ -12,8 +13,13 @@ import StranKosarice from './Stran/StranKosarice';
 import PrijavnaStran from './Stran/PrijavnaStran';
 
 function App() {
-  const { stanje } = useContext(Shramba);
-  const { kosarica } = stanje;
+  const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
+  const { kosarica, podatkiUporabnika } = stanje;
+
+  const odjavaHandler = () => {
+    ctxNalozi({ tip: 'UPORABNIK_ODJAVA' });
+    localStorage.removeItem('podatkiUporabnika');
+  };
 
   return (
     <BrowserRouter>
@@ -36,6 +42,33 @@ function App() {
                     </Badge>
                   )}
                 </Link>
+              </Nav>
+              <Nav>
+                {podatkiUporabnika ? (
+                  <NavDropdown
+                    title={podatkiUporabnika.imeUporabnika}
+                    id="collasible-nav-dropdown"
+                  >
+                    <LinkContainer to="/račun">
+                      <NavDropdown.Item>Uporabniški račun</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/naročila">
+                      <NavDropdown.Item>Naročila</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <Link
+                      className="dropdown-item"
+                      to="#odjava"
+                      onClick={odjavaHandler}
+                    >
+                      Odjava
+                    </Link>
+                  </NavDropdown>
+                ) : (
+                  <Link className="nav-link" to="/prijava">
+                    Prijava
+                  </Link>
+                )}
               </Nav>
             </Container>
           </Navbar>
