@@ -11,6 +11,7 @@ import { useContext } from 'react';
 import { Shramba } from './Shramba';
 import StranKosarice from './Stran/StranKosarice';
 import PrijavnaStran from './Stran/PrijavnaStran';
+import StranDostave from './Stran/StranDostave';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -19,6 +20,7 @@ function App() {
   const odjavaHandler = () => {
     ctxNalozi({ tip: 'UPORABNIK_ODJAVA' });
     localStorage.removeItem('podatkiUporabnika');
+    localStorage.removeItem('dostava');
   };
 
   return (
@@ -79,6 +81,7 @@ function App() {
               <Route path="/izdelek/:alt" element={<StranIzdelka />} />
               <Route path="/" element={<DomacaStran />} />
               <Route path="/prijava" element={<PrijavnaStran />} />
+              <Route path="/dostava" element={<StranDostave />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>

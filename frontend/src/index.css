@@ -52,6 +52,15 @@ main {
 .prijavniObrazec {
   max-width: 600px;
 }
+
+.koraki-blagajne > div {
+  border-bottom: 0.3rem solid gray;
+  color: gray;
+}
+.koraki-blagajne > div.opravljen {
+  border-bottom: 0.3rem solid black;
+  color: black;
+}
 /*.imeCena {
   transition: background-color 0.3s;
 }
