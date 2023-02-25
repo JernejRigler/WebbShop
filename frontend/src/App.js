@@ -12,6 +12,7 @@ import { Shramba } from './Shramba';
 import StranKosarice from './Stran/StranKosarice';
 import PrijavnaStran from './Stran/PrijavnaStran';
 import StranDostave from './Stran/StranDostave';
+import RegistracijaStran from './Stran/RegistracijaStran';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -81,6 +82,7 @@ function App() {
               <Route path="/izdelek/:alt" element={<StranIzdelka />} />
               <Route path="/" element={<DomacaStran />} />
               <Route path="/prijava" element={<PrijavnaStran />} />
+              <Route path="/registracija" element={<RegistracijaStran />} />
               <Route path="/dostava" element={<StranDostave />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>

@@ -26,4 +26,23 @@ uporabnikUsmerjevalnik.post(
   })
 );
 
+uporabnikUsmerjevalnik.post(
+  '/registracija',
+  expressAsyncHandler(async (req, res) => {
+    const novUporabnik = new Uporabnik({
+      imeUporabnika: req.body.imeUporabnika,
+      email: req.body.email,
+      geslo: bcrypt.hashSync(req.body.geslo),
+    });
+    const uporabnik = await novUporabnik.save();
+    res.send({
+      _id: uporabnik._id,
+      imeUporabnika: uporabnik.imeUporabnika,
+      email: uporabnik.email,
+      praviceAdmina: uporabnik.praviceAdmina,
+      token: generirajToken(uporabnik),
+    });
+  })
+);
+
 export default uporabnikUsmerjevalnik;
