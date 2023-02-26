@@ -24,6 +24,7 @@ export default function StranPlacila() {
   }, [dostava, navigiraj]);
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(imeNacinPlacila);
     ctxNalozi({ tip: 'SHRANI_NACIN_PLACILA', payload: imeNacinPlacila });
     localStorage.setItem('nacinPlacila', imeNacinPlacila);
     navigiraj('/oddajNarocilo');

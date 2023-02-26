@@ -14,6 +14,7 @@ import PrijavnaStran from './Stran/PrijavnaStran';
 import StranDostave from './Stran/StranDostave';
 import RegistracijaStran from './Stran/RegistracijaStran';
 import StranPlacila from './Stran/StranPlacila';
+import OddajNarociloStran from './Stran/OddajNarociloStran';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -87,6 +88,7 @@ function App() {
               <Route path="/registracija" element={<RegistracijaStran />} />
               <Route path="/dostava" element={<StranDostave />} />
               <Route path="/placilo" element={<StranPlacila />} />
+              <Route path="/oddajNarocilo" element={<OddajNarociloStran />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>

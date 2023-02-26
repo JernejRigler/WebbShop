@@ -7,7 +7,6 @@ import Sporocilo from '../Komponente/Sporocilo';
 import { Link, useNavigate } from 'react-router-dom';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 
 export default function StranKosarice() {
