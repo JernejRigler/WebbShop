@@ -13,6 +13,9 @@ const prvotnoStanje = {
     dostava: localStorage.getItem('dostava')
       ? JSON.parse(localStorage.getItem('dostava'))
       : {},
+    nacinPlacila: localStorage.getItem('nacinPlacila')
+      ? localStorage.getItem('nacinPlacila')
+      : '',
   },
 };
 function reducer(stanje, akcija) {
@@ -48,6 +51,7 @@ function reducer(stanje, akcija) {
         kosarica: {
           izdelkiKosarice: [],
           dostava: {},
+          nacinPlacila: '',
         },
       };
     case 'SHRANI_DOSTAVO':
@@ -57,6 +61,11 @@ function reducer(stanje, akcija) {
           ...stanje.kosarica,
           dostava: akcija.payload,
         },
+      };
+    case 'SHRANI_NACIN_PLACILA':
+      return {
+        ...stanje,
+        kosarica: { ...stanje.kosarica, nacinPlacila: akcija.payload },
       };
     default:
       return stanje;

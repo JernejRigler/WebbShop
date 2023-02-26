@@ -13,6 +13,7 @@ import StranKosarice from './Stran/StranKosarice';
 import PrijavnaStran from './Stran/PrijavnaStran';
 import StranDostave from './Stran/StranDostave';
 import RegistracijaStran from './Stran/RegistracijaStran';
+import StranPlacila from './Stran/StranPlacila';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -22,6 +23,7 @@ function App() {
     ctxNalozi({ tip: 'UPORABNIK_ODJAVA' });
     localStorage.removeItem('podatkiUporabnika');
     localStorage.removeItem('dostava');
+    localStorage.removeItem('nacinPlacila');
   };
 
   return (
@@ -84,6 +86,7 @@ function App() {
               <Route path="/prijava" element={<PrijavnaStran />} />
               <Route path="/registracija" element={<RegistracijaStran />} />
               <Route path="/dostava" element={<StranDostave />} />
+              <Route path="/placilo" element={<StranPlacila />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>
