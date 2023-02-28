@@ -42,6 +42,12 @@ function reducer(stanje, akcija) {
       localStorage.setItem('izdelkiKosarice', JSON.stringify(izdelkiKosarice));
       return { ...stanje, kosarica: { ...stanje.kosarica, izdelkiKosarice } };
     }
+    case 'KOSARICA_IZPRAZNI': {
+      return {
+        ...stanje,
+        kosarica: { ...stanje.kosarica, izdelkiKosarice: [] },
+      };
+    }
     case 'UPORABNIK_PRIJAVA':
       return { ...stanje, podatkiUporabnika: akcija.payload };
     case 'UPORABNIK_ODJAVA':

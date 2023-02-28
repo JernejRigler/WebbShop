@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
+import Axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import KorakiBlagajne from '../Komponente/KorakiBlagajne';
 import Row from 'react-bootstrap/Row';
@@ -9,11 +10,32 @@ import Badge from 'react-bootstrap/Badge';
 import { Link, useNavigate } from 'react-router-dom';
 import { Shramba } from '../Shramba';
 import ListGroup from 'react-bootstrap/ListGroup';
+import dobiError from '../Errorji';
+import Nalaganje from '../Komponente/Nalaganje';
+
+const reducer = (stanje, akcija) => {
+  switch (akcija.tip) {
+    case 'CREATE_REQUEST':
+      return { ...stanje, nalaganje: true };
+    case 'CREATE_SUCCESS':
+      return { ...stanje, nalaganje: false };
+    case 'CREATE_FAIL':
+      return { ...stanje, nalaganje: false };
+    default:
+      return stanje;
+  }
+};
 
 export default function OddajNarociloStran() {
   const navigiraj = useNavigate();
+
+  const [{ nalaganje }, nalozi] = useReducer(reducer, {
+    nalaganje: false,
+  });
+
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
   const { kosarica, podatkiUporabnika } = stanje;
+
   const zaokrozi = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   kosarica.cenaIzdelkov = zaokrozi(
     kosarica.izdelkiKosarice.reduce((a, c) => a + c.kolicina * c.cena, 0)
@@ -22,7 +44,35 @@ export default function OddajNarociloStran() {
   kosarica.cenaDostave =
     kosarica.cenaIzdelkov > 250 ? zaokrozi(0) : zaokrozi(5);
   kosarica.koncnaCena = kosarica.cenaIzdelkov + kosarica.cenaDostave;
-  const oddajNarociloHandler = async () => {};
+
+  const oddajNarociloHandler = async () => {
+    try {
+      nalozi({ tip: 'CREATE_REQUEST' });
+      const { data } = await Axios.post(
+        '/api/narocila',
+        {
+          izdelkiNarocila: kosarica.izdelkiKosarice,
+          dostava: kosarica.dostava,
+          nacinPlacila: kosarica.nacinPlacila,
+          cenaIzdelkov: kosarica.cenaIzdelkov,
+          cenaDostave: kosarica.cenaDostave,
+          koncnaCena: kosarica.koncnaCena,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${podatkiUporabnika.token}`,
+          },
+        }
+      );
+      ctxNalozi({ tip: 'KOSARICA_IZPRAZNI' });
+      nalozi({ tip: 'CREATE_SUCCESS' });
+      localStorage.removeItem('izdelkiKosarice');
+      navigiraj(`/narocilo/${data.narocilo._id}`);
+    } catch (err) {
+      nalozi({ tip: 'CREATE_FAIL' });
+      alert(dobiError(err));
+    }
+  };
 
   useEffect(() => {
     if (!kosarica.nacinPlacila) {
@@ -131,6 +181,7 @@ export default function OddajNarociloStran() {
               >
                 ODDAJ NAROČILO
               </Button>
+              {nalaganje && <Nalaganje></Nalaganje>}
             </Card.Body>
           </Card>
         </Col>

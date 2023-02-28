@@ -14,3 +14,20 @@ export const generirajToken = (uporabnik) => {
     }
   );
 };
+
+export const jeAvtoriziran = (req, res, next) => {
+  const avtorizacija = req.headers.authorization;
+  if (avtorizacija) {
+    const token = avtorizacija.slice(7, avtorizacija.length);
+    jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+      if (err) {
+        res.status(401).send({ message: 'Napacen token' });
+      } else {
+        req.uporabnik = decode;
+        next();
+      }
+    });
+  } else {
+    res.status(401).send({ message: 'Ni tokena' });
+  }
+};

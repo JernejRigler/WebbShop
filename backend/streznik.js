@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import seedUsmerjevalnik from './usmeritve/seedUsmeritve.js';
 import izdelekUsmerjevalnik from './usmeritve/izdelekUsmeritve.js';
 import uporabnikUsmerjevalnik from './usmeritve/uporabnikUsmeritve.js';
+import narociloUsmerjevalnik from './usmeritve/narociloUsmeritve.js';
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.use('/api/seed', seedUsmerjevalnik);
 app.use('/api/izdelki', izdelekUsmerjevalnik);
 
 app.use('/api/uporabniki', uporabnikUsmerjevalnik);
+
+app.use('/api/narocila', narociloUsmerjevalnik);
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
