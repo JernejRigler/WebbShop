@@ -2,6 +2,7 @@ import express from 'express';
 import Narocilo from '../modeli/narociloModel.js';
 import { jeAvtoriziran } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
+import Izdelek from '../modeli/izdelekModel.js';
 
 const narociloUsmerjevalnik = express.Router();
 narociloUsmerjevalnik.post(
@@ -21,6 +22,15 @@ narociloUsmerjevalnik.post(
       uporabnik: req.uporabnik._id,
     });
     const narocilo = await novoNarocilo.save();
+    for (const index in narocilo.izdelkiNarocila) {
+      const izdelekNarocila = narocilo.izdelkiNarocila[index];
+
+      const izdelek = await Izdelek.findById(izdelekNarocila.izdelek);
+
+      izdelek.zaloga -= izdelekNarocila.kolicina;
+
+      await izdelek.save();
+    }
     res.status(201).send({ message: 'Novo narocilo kreirano', narocilo });
   })
 );

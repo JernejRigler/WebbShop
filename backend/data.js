@@ -54,6 +54,19 @@ let data = {
       opis: 'Tablični računalnik Tab M10 Plus (3rd Gen) se ponaša z elegantno obliko in 27 cm (10,61") velikim zaslonom v ločljivosti 2K (2000×1200). Zmogljiv procesor MediaTek Helio G80 in delovni pomnilnik kapacitete 4 GB bosta zagotovila brezhibno delo in zabavo.',
       steviloOcen: 5,
     },
+    {
+      imeIzdelka: 'tablica2',
+      //_id: '100003',
+      cena: 250.79,
+      kategorijaIzdelka: 'Tablice',
+      alt: 'lenovo-tab-m10-plus-g3-tablicni-racunalnik-neki',
+      slika: '/slike/slika3.jpg',
+      zaloga: 10,
+      znamka: 'Lenovo',
+      ocena: 4,
+      opis: 'Tablični računalnik Tab M10 Plus (3rd Gen) se ponaša z elegantno obliko in 27 cm (10,61") velikim zaslonom v ločljivosti 2K (2000×1200). Zmogljiv procesor MediaTek Helio G80 in delovni pomnilnik kapacitete 4 GB bosta zagotovila brezhibno delo in zabavo.',
+      steviloOcen: 5,
+    },
   ],
 };
 export default data;
