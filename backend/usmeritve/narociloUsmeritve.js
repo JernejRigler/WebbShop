@@ -24,4 +24,16 @@ narociloUsmerjevalnik.post(
     res.status(201).send({ message: 'Novo narocilo kreirano', narocilo });
   })
 );
+narociloUsmerjevalnik.get(
+  '/:id',
+  jeAvtoriziran,
+  expressAsyncHandler(async (req, res) => {
+    const narocilo = await Narocilo.findById(req.params.id);
+    if (narocilo) {
+      res.send(narocilo);
+    } else {
+      res.status(404).send({ message: 'Narocilo ni najdeno' });
+    }
+  })
+);
 export default narociloUsmerjevalnik;
