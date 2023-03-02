@@ -16,6 +16,7 @@ import RegistracijaStran from './Stran/RegistracijaStran';
 import StranPlacila from './Stran/StranPlacila';
 import OddajNarociloStran from './Stran/OddajNarociloStran';
 import NarociloStran from './Stran/NarociloStran';
+import ZgodovinaNarocil from './Stran/ZgodovinaNarocil';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -56,10 +57,10 @@ function App() {
                     title={podatkiUporabnika.imeUporabnika}
                     id="collasible-nav-dropdown"
                   >
-                    <LinkContainer to="/račun">
+                    <LinkContainer to="/racun">
                       <NavDropdown.Item>Uporabniški račun</NavDropdown.Item>
                     </LinkContainer>
-                    <LinkContainer to="/naročila">
+                    <LinkContainer to="/narocila">
                       <NavDropdown.Item>Naročila</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Divider />
@@ -91,6 +92,7 @@ function App() {
               <Route path="/placilo" element={<StranPlacila />} />
               <Route path="/oddajNarocilo" element={<OddajNarociloStran />} />
               <Route path="/narocilo/:id" element={<NarociloStran />} />
+              <Route path="/narocila" element={<ZgodovinaNarocil />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>

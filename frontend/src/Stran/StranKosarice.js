@@ -45,7 +45,7 @@ export default function StranKosarice() {
         <Col md={12}>
           {izdelkiKosarice.length === 0 ? (
             <Sporocilo poslano={'warning'}>
-              Trenutno nimate v košarici nobenega izdelka.
+              Trenutno nimate v košarici nobenega izdelka.{' '}
               <Link to="/">Nazaj v trgovino</Link>
             </Sporocilo>
           ) : (

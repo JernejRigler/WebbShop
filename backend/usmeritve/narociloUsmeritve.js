@@ -34,6 +34,16 @@ narociloUsmerjevalnik.post(
     res.status(201).send({ message: 'Novo narocilo kreirano', narocilo });
   })
 );
+
+narociloUsmerjevalnik.get(
+  '/mojaNarocila',
+  jeAvtoriziran,
+  expressAsyncHandler(async (req, res) => {
+    const narocila = await Narocilo.find({ uporabnik: req.uporabnik._id });
+    res.send(narocila);
+  })
+);
+
 narociloUsmerjevalnik.get(
   '/:id',
   jeAvtoriziran,
