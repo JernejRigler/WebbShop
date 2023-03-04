@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd backend && npm install  && cd ../frontend && npm install && npm run build",
+    "build": "cd backend && npm install  && cd ../frontend && npm install && npm run build --legacy-peer-deps",
     "start": "node backend/streznik.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
