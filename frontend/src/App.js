@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Shramba } from './Shramba';
 import StranKosarice from './Stran/StranKosarice';
 import PrijavnaStran from './Stran/PrijavnaStran';
@@ -17,6 +17,10 @@ import StranPlacila from './Stran/StranPlacila';
 import OddajNarociloStran from './Stran/OddajNarociloStran';
 import NarociloStran from './Stran/NarociloStran';
 import ZgodovinaNarocil from './Stran/ZgodovinaNarocil';
+import Button from 'react-bootstrap/Button';
+import dobiError from './Errorji';
+import axios from 'axios';
+import IskalnoPolje from './Komponente/IskalnoPolje';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -29,16 +33,46 @@ function App() {
     localStorage.removeItem('nacinPlacila');
   };
 
+  const [stranskaVrsticaOdprta, nastaviStranskaVrsticaOdprta] = useState(false);
+  const [kategorije, nastaviKategorije] = useState([]);
+
+  useEffect(() => {
+    const dobiKategorije = async () => {
+      try {
+        const { data } = await axios.get('/api/izdelki/kategorije');
+        nastaviKategorije(data);
+      } catch (err) {
+        alert(dobiError(err));
+      }
+    };
+    dobiKategorije();
+  }, []);
+
   return (
     <BrowserRouter>
-      <div className="d-flex flex-column container-stran">
+      <div
+        className={
+          stranskaVrsticaOdprta
+            ? 'd-flex flex-column site-container active-cont'
+            : 'd-flex flex-column site-container'
+        }
+      >
         <header>
           <Navbar bg="dark" variant="dark">
             <Container>
+              <Button
+                variant="dark"
+                onClick={() =>
+                  nastaviStranskaVrsticaOdprta(!stranskaVrsticaOdprta)
+                }
+              >
+                <i class="fa-solid fa-bars"></i>
+              </Button>
               <LinkContainer to="/">
                 <Navbar.Brand>WebbShop</Navbar.Brand>
               </LinkContainer>
               <Nav className="me-auto">
+                <IskalnoPolje />
                 <Link to="/kosarica" className="nav-link">
                   Kosarica
                   {kosarica.izdelkiKosarice.length > 0 && (
@@ -81,6 +115,32 @@ function App() {
             </Container>
           </Navbar>
         </header>
+        <div
+          className={
+            stranskaVrsticaOdprta
+              ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
+              : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
+          }
+        >
+          <Nav className="flex-column text-white w-100 p-2">
+            <Nav.Item>
+              <strong>Kategorije</strong>
+            </Nav.Item>
+            {kategorije.map((kategorija) => (
+              <Nav.Item key={kategorija}>
+                <LinkContainer
+                  to={{
+                    pathname: '/isci',
+                    search: `?kategorija=${kategorija}`,
+                  }}
+                  onClick={() => nastaviKategorije(false)}
+                >
+                  <Nav.Link>{kategorija}</Nav.Link>
+                </LinkContainer>
+              </Nav.Item>
+            ))}
+          </Nav>
+        </div>
         <main>
           <Container>
             <Routes>
