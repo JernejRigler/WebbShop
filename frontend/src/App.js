@@ -131,10 +131,12 @@ function App() {
               <Nav.Item key={kategorija}>
                 <LinkContainer
                   to={{
-                    pathname: '/search',
-                    search: `?category=${kategorija}`,
+                    pathname: '/isci',
+                    search: `?kategorija=${kategorija}`,
                   }}
-                  onClick={() => nastaviKategorije(false)}
+                  onClick={() =>
+                    nastaviStranskaVrsticaOdprta(!stranskaVrsticaOdprta)
+                  }
                 >
                   <Nav.Link>{kategorija}</Nav.Link>
                 </LinkContainer>
@@ -154,7 +156,7 @@ function App() {
               <Route path="/oddajNarocilo" element={<OddajNarociloStran />} />
               <Route path="/narocilo/:id" element={<NarociloStran />} />
               <Route path="/narocila" element={<ZgodovinaNarocil />} />
-              <Route path="/search" element={<IsciStran />} />
+              <Route path="/isci" element={<IsciStran />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>

@@ -9,80 +9,82 @@ izdelekUsmerjevalnik.get('/', async (req, res) => {
   res.send(izdelki);
 });
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 10;
 izdelekUsmerjevalnik.get(
-  '/search',
+  '/isci',
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
     const pageSize = query.pageSize || PAGE_SIZE;
-    const page = query.page || 1;
-    const category = query.category || '';
-    const price = query.price || '';
-    const rating = query.rating || '';
-    const order = query.order || '';
-    const searchQuery = query.query || '';
+    const stran = query.stran || 1;
+    const kategorija = query.kategorija || '';
+    const cena = query.cena || '';
+    const ocena = query.ocena || '';
+    const sortiraj = query.sortiraj || '';
+    const poizvedba = query.poizvedba || '';
 
     const queryFilter =
-      searchQuery && searchQuery !== 'all'
+      poizvedba && poizvedba !== 'vse'
         ? {
             imeIzdelka: {
-              $regex: searchQuery,
+              $regex: poizvedba,
               $options: 'i',
             },
           }
         : {};
     const categoryFilter =
-      category && category !== 'all' ? { kategorijaIzdelka: category } : {};
+      kategorija && kategorija !== 'vse'
+        ? { kategorijaIzdelka: kategorija }
+        : {};
     const ratingFilter =
-      rating && rating !== 'all'
+      ocena && ocena !== 'vse'
         ? {
             ocena: {
-              $gte: Number(rating),
+              $gte: Number(ocena),
             },
           }
         : {};
     const priceFilter =
-      price && price !== 'all'
+      cena && cena !== 'vse'
         ? {
             // 1-50
             cena: {
-              $gte: Number(price.split('-')[0]),
-              $lte: Number(price.split('-')[1]),
+              $gte: Number(cena.split('-')[0]),
+              $lte: Number(cena.split('-')[1]),
             },
           }
         : {};
     const sortOrder =
-      order === 'lowest'
+      sortiraj === 'najnizjaCena'
         ? { cena: 1 }
-        : order === 'highest'
+        : sortiraj === 'najvisjaCena'
         ? { cena: -1 }
-        : order === 'toprated'
+        : sortiraj === 'najboljOcenjeno'
         ? { ocena: -1 }
-        : order === 'newest'
+        : sortiraj === 'priporocamo'
         ? { createdAt: -1 }
         : { _id: -1 };
 
-    const products = await Izdelek.find({
+    const izdelki = await Izdelek.find({
       ...queryFilter,
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
     })
       .sort(sortOrder)
-      .skip(pageSize * (page - 1))
+      .skip(pageSize * (stran - 1))
       .limit(pageSize);
 
-    const countProducts = await Izdelek.countDocuments({
+    const steviloIzdelkov = await Izdelek.countDocuments({
       ...queryFilter,
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
     });
     res.send({
-      products,
-      countProducts,
-      page,
-      pages: Math.ceil(countProducts / pageSize),
+      izdelki,
+      steviloIzdelkov,
+      stran,
+      strani: Math.ceil(steviloIzdelkov / pageSize),
     });
   })
 );
