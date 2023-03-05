@@ -22,6 +22,9 @@ import dobiError from './Errorji';
 import axios from 'axios';
 import IskalnoPolje from './Komponente/IskalnoPolje';
 import IsciStran from './Stran/IsciStran';
+import ZasciteneUsmeritve from './Komponente/ZasciteneUsmeritve';
+import NadzornaPloscaStran from './Stran/NadzornaPloscaStran';
+import AdminUsmeritev from './Komponente/AdminUsmeritev';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -99,6 +102,22 @@ function App() {
                       <NavDropdown.Item>Naročila</NavDropdown.Item>
                     </LinkContainer>
                     <NavDropdown.Divider />
+                    {podatkiUporabnika && podatkiUporabnika.praviceAdmina && (
+                      <>
+                        <NavDropdown.ItemText>
+                          <strong>Admin nastavitve</strong>
+                        </NavDropdown.ItemText>
+                        <LinkContainer to="/admin/nadzornaPlosca">
+                          <NavDropdown.Item>Nadzorna plošča</NavDropdown.Item>
+                        </LinkContainer>
+                        <LinkContainer to="/admin/nadzorIzdelkov">
+                          <NavDropdown.Item>
+                            Upravljanje izdelkov
+                          </NavDropdown.Item>
+                        </LinkContainer>
+                        <NavDropdown.Divider />
+                      </>
+                    )}
                     <Link
                       className="dropdown-item"
                       to="#odjava"
@@ -154,10 +173,32 @@ function App() {
               <Route path="/dostava" element={<StranDostave />} />
               <Route path="/placilo" element={<StranPlacila />} />
               <Route path="/oddajNarocilo" element={<OddajNarociloStran />} />
-              <Route path="/narocilo/:id" element={<NarociloStran />} />
-              <Route path="/narocila" element={<ZgodovinaNarocil />} />
+              <Route
+                path="/narocilo/:id"
+                element={
+                  <ZasciteneUsmeritve>
+                    <NarociloStran />
+                  </ZasciteneUsmeritve>
+                }
+              />
+              <Route
+                path="/narocila"
+                element={
+                  <ZasciteneUsmeritve>
+                    <ZgodovinaNarocil />
+                  </ZasciteneUsmeritve>
+                }
+              />
               <Route path="/isci" element={<IsciStran />} />
               <Route path="/kosarica" element={<StranKosarice />} />
+              <Route
+                path="/admin/nadzornaPlosca"
+                element={
+                  <AdminUsmeritev>
+                    <NadzornaPloscaStran />
+                  </AdminUsmeritev>
+                }
+              />
             </Routes>
           </Container>
         </main>
