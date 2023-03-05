@@ -21,6 +21,7 @@ import Button from 'react-bootstrap/Button';
 import dobiError from './Errorji';
 import axios from 'axios';
 import IskalnoPolje from './Komponente/IskalnoPolje';
+import IsciStran from './Stran/IsciStran';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -130,8 +131,8 @@ function App() {
               <Nav.Item key={kategorija}>
                 <LinkContainer
                   to={{
-                    pathname: '/isci',
-                    search: `?kategorija=${kategorija}`,
+                    pathname: '/search',
+                    search: `?category=${kategorija}`,
                   }}
                   onClick={() => nastaviKategorije(false)}
                 >
@@ -153,6 +154,7 @@ function App() {
               <Route path="/oddajNarocilo" element={<OddajNarociloStran />} />
               <Route path="/narocilo/:id" element={<NarociloStran />} />
               <Route path="/narocila" element={<ZgodovinaNarocil />} />
+              <Route path="/search" element={<IsciStran />} />
               <Route path="/kosarica" element={<StranKosarice />} />
             </Routes>
           </Container>

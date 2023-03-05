@@ -1,5 +1,5 @@
 function Ocena(poslano) {
-  const { ocena, steviloOcen } = poslano;
+  const { ocena, steviloOcen, napis } = poslano;
   return (
     <div className="ocena">
       <span>
@@ -57,7 +57,7 @@ function Ocena(poslano) {
           }
         ></i>
       </span>
-      <span>({steviloOcen} ocen)</span>
+      {napis ? <span>{napis}</span> : <span>({steviloOcen} ocen)</span>}
     </div>
   );
 }

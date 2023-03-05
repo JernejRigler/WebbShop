@@ -10,7 +10,7 @@ export default function IskalnoPolje() {
   const [poizvedba, nastaviPoizvedbo] = useState('');
   const submitHandler = (e) => {
     e.preventDefault();
-    navigiraj(poizvedba ? `/isci/?poizvedba=${poizvedba}` : '/isci');
+    navigiraj(poizvedba ? `/search/?query=${poizvedba}` : '/search');
   };
   const handleClick = (val) => {
     nastaviPoizvedbo('');
