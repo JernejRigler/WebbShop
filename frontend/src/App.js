@@ -25,6 +25,7 @@ import IsciStran from './Stran/IsciStran';
 import ZasciteneUsmeritve from './Komponente/ZasciteneUsmeritve';
 import NadzornaPloscaStran from './Stran/NadzornaPloscaStran';
 import AdminUsmeritev from './Komponente/AdminUsmeritev';
+import StranRacuna from './Stran/StranRacuna';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -35,6 +36,7 @@ function App() {
     localStorage.removeItem('podatkiUporabnika');
     localStorage.removeItem('dostava');
     localStorage.removeItem('nacinPlacila');
+    window.location.href = '/prijava';
   };
 
   const [stranskaVrsticaOdprta, nastaviStranskaVrsticaOdprta] = useState(false);
@@ -172,6 +174,14 @@ function App() {
               <Route path="/registracija" element={<RegistracijaStran />} />
               <Route path="/dostava" element={<StranDostave />} />
               <Route path="/placilo" element={<StranPlacila />} />
+              <Route
+                path="/racun"
+                element={
+                  <ZasciteneUsmeritve>
+                    <StranRacuna />
+                  </ZasciteneUsmeritve>
+                }
+              />
               <Route path="/oddajNarocilo" element={<OddajNarociloStran />} />
               <Route
                 path="/narocilo/:id"

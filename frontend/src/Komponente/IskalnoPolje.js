@@ -23,6 +23,7 @@ export default function IskalnoPolje() {
           <i class="fa-solid fa-magnifying-glass"></i>
         </InputGroup.Text>
         <FormControl
+          className="iskalno-polje"
           type="text"
           name="p"
           id="p"
