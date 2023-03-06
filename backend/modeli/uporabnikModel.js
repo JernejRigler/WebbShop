@@ -8,7 +8,7 @@ const shemaUporabnika = new mongoose.Schema(
     praviceAdmina: { type: Boolean, default: false, required: true },
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 

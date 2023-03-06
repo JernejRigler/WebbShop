@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,6 +13,9 @@ import Nalaganje from '../Komponente/Nalaganje';
 import Sporocilo from '../Komponente/Sporocilo';
 import dobiError from '../Errorji';
 import { Shramba } from '../Shramba';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 const reducer = (stanje, akcija) => {
   switch (akcija.tip) {
@@ -22,6 +25,15 @@ const reducer = (stanje, akcija) => {
       return { ...stanje, izdelek: akcija.payload, nalaganje: 0 };
     case 'FETCH_FAIL':
       return { ...stanje, nalaganje: 0, error: akcija.payload };
+    case 'OSVEZI_IZDELEK':
+      return { ...stanje, izdelek: akcija.payload };
+    case 'CREATE_REQUEST':
+      return { ...stanje, nalaganjeKreiranjeMnenj: true };
+    case 'CREATE_SUCCESS':
+      return { ...stanje, nalaganjeKreiranjeMnenj: false };
+    case 'CREATE_FAIL':
+      return { ...stanje, nalaganjeKreiranjeMnenj: false };
+
     default:
       return stanje;
   }
@@ -32,11 +44,12 @@ function StranIzdelka() {
   let params = useParams();
   let { alt } = params;
 
-  const [{ nalaganje, error, izdelek }, nalozi] = useReducer(reducer, {
-    izdelek: [],
-    nalaganje: 1,
-    error: '',
-  });
+  const [{ nalaganje, error, izdelek, nalaganjeKreiranjeMnenj }, nalozi] =
+    useReducer(reducer, {
+      izdelek: [],
+      nalaganje: 1,
+      error: '',
+    });
   useEffect(() => {
     const dobiPodatke = async () => {
       nalozi({ tip: 'FETCH_REQUEST' });
@@ -51,7 +64,7 @@ function StranIzdelka() {
   }, [alt]);
 
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
-  const { kosarica } = stanje;
+  const { kosarica, podatkiUporabnika } = stanje;
   const dodajVKosaricoHander = async () => {
     const obstajaVKosarici = kosarica.izdelkiKosarice.find(
       (x) => x._id === izdelek._id
@@ -68,6 +81,40 @@ function StranIzdelka() {
       payload: { ...izdelek, kolicina },
     });
     navigiraj('/kosarica');
+  };
+  let mnenjaRef = useRef();
+  const [ocena, nastaviOceno] = useState(0);
+  const [komentar, nastaviKomentar] = useState('');
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    if (!komentar || !ocena) {
+      alert('Prosim vnesite komentar in oceno');
+      return;
+    }
+    try {
+      const { data } = await axios.post(
+        `/api/izdelki/${izdelek._id}/mnenja`,
+        { ocena, komentar, ime: podatkiUporabnika.ime },
+        {
+          headers: {
+            authorization: `Bearer ${podatkiUporabnika.token}`,
+          },
+        }
+      );
+      nalozi({ tip: 'CREATE_SUCCESS' });
+      alert('Mnenje uspešno oddano');
+      izdelek.mnenja.unshift(data.mnenje);
+      izdelek.steviloOcen = data.steviloOcen;
+      izdelek.ocena = data.ocena;
+      nalozi({ tip: 'OSVEZI_IZDELEK', payload: izdelek });
+      window.scrollTo({
+        behavior: 'smooth',
+        top: mnenjaRef.current.offsetTop,
+      });
+    } catch (error) {
+      alert(dobiError(error));
+      nalozi({ tip: 'CREATE_FAIL' });
+    }
   };
 
   return nalaganje ? (
@@ -126,6 +173,74 @@ function StranIzdelka() {
           </ListGroup>
         </Col>
       </Row>
+      <div className="my-3">
+        <h2 ref={mnenjaRef}>Mnenja kupcev</h2>
+        <div className="mb-3">
+          {izdelek.mnenja.length === 0 && (
+            <Sporocilo tip="warning">Ta izdelek še nima nobene ocene</Sporocilo>
+          )}
+          {izdelek.mnenja.map((m) => (
+            <Card>
+              <Card.Body>
+                <Card.Text>
+                  <strong>{m.ime}</strong> {m.createdAt.substring(0, 10)}
+                </Card.Text>
+                <Ocena ocena={m.ocena} napis=" "></Ocena>
+                <Card.Text>{m.komentar}</Card.Text>
+              </Card.Body>
+            </Card>
+          ))}
+          <div className="my-3">
+            {podatkiUporabnika ? (
+              <>
+                <h2>Podajte svoje mnenje:</h2>
+                <Form onSubmit={submitHandler}>
+                  <Form.Group controlId="ocena" className="mb-3">
+                    <Form.Label>Ocena</Form.Label>
+                    <Form.Select
+                      aria-label="Ocena"
+                      value={ocena}
+                      onChange={(e) => nastaviOceno(e.target.value)}
+                    >
+                      <option value="">Izberite...</option>
+                      <option value="1">1 - nezadostno</option>
+                      <option value="2">2 - zadostno</option>
+                      <option value="3">3 - dobro</option>
+                      <option value="4">4 - prav dobro.</option>
+                      <option value="5">5- odlično</option>
+                    </Form.Select>
+                  </Form.Group>
+                  <FloatingLabel
+                    controlId="floatingTextarea"
+                    label="Komentar"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      as="textarea"
+                      placeholder="Vnesite komentar"
+                      value={komentar}
+                      onChange={(e) => nastaviKomentar(e.target.value)}
+                    />
+                  </FloatingLabel>
+                  <div className="mb-3">
+                    <Button disabled={nalaganjeKreiranjeMnenj} type="submit">
+                      Oddaj mnenje
+                    </Button>
+                    {nalaganjeKreiranjeMnenj && <Nalaganje></Nalaganje>}
+                  </div>
+                </Form>
+              </>
+            ) : (
+              <Sporocilo>
+                Za podajo mnenja se prijavite{' '}
+                <Link to={`/prijava/?redirect=/izdelek/${izdelek.alt}`}>
+                  tukaj
+                </Link>
+              </Sporocilo>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Izdelek from '../modeli/izdelekModel.js';
+import { jeAvtoriziran } from '../utils.js';
 
 const izdelekUsmerjevalnik = express.Router();
 
@@ -8,6 +9,38 @@ izdelekUsmerjevalnik.get('/', async (req, res) => {
   const izdelki = await Izdelek.find();
   res.send(izdelki);
 });
+
+izdelekUsmerjevalnik.post(
+  '/:id/mnenja',
+  jeAvtoriziran,
+  expressAsyncHandler(async (req, res) => {
+    const izdelekId = req.params.id;
+    const izdelek = await Izdelek.findById(izdelekId);
+    if (izdelek) {
+      if (izdelek.mnenja.find((x) => x.ime === req.uporabnik.imeUporabnika)) {
+        return res.status(400).send({ message: 'Si ze poslal mnenje' });
+      }
+      const mnenje = {
+        ime: req.uporabnik.imeUporabnika,
+        ocena: Number(req.body.ocena),
+        komentar: req.body.komentar,
+      };
+      izdelek.mnenja.push(mnenje);
+      izdelek.steviloOcen = izdelek.mnenja.length;
+      izdelek.ocena =
+        izdelek.mnenja.reduce((a, c) => c.ocena + a, 0) / izdelek.mnenja.length;
+      const posodobljenIzdelek = await izdelek.save();
+      res.status(201).send({
+        message: 'Mnenje kreirano',
+        mnenje: posodobljenIzdelek.mnenja[posodobljenIzdelek.mnenja.length - 1],
+        steviloOcen: izdelek.steviloOcen,
+        ocena: izdelek.ocena,
+      });
+    } else {
+      res.status(404).send({ message: 'Izdelek ni najden' });
+    }
+  })
+);
 
 const PAGE_SIZE = 10;
 izdelekUsmerjevalnik.get(

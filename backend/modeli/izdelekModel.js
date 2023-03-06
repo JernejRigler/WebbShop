@@ -1,5 +1,16 @@
 import mongoose from 'mongoose';
 
+const shemaMnenj = new mongoose.Schema(
+  {
+    ime: { type: String, required: true },
+    komentar: { type: String, required: true },
+    ocena: { type: Number, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const shemaIzdelka = new mongoose.Schema(
   {
     imeIzdelka: { type: String, required: true, unique: true },
@@ -12,9 +23,10 @@ const shemaIzdelka = new mongoose.Schema(
     zaloga: { type: Number, required: true },
     ocena: { type: Number, required: true },
     steviloOcen: { type: Number, required: true },
+    mnenja: [shemaMnenj],
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 
