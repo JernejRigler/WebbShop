@@ -1,8 +1,9 @@
 import express from 'express';
 import Narocilo from '../modeli/narociloModel.js';
-import { jeAvtoriziran } from '../utils.js';
+import { jeAvtoriziran, jeAdmin } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
 import Izdelek from '../modeli/izdelekModel.js';
+import Uporabnik from '../modeli/uporabnikModel.js';
 
 const narociloUsmerjevalnik = express.Router();
 narociloUsmerjevalnik.post(
@@ -32,6 +33,50 @@ narociloUsmerjevalnik.post(
       await izdelek.save();
     }
     res.status(201).send({ message: 'Novo narocilo kreirano', narocilo });
+  })
+);
+
+narociloUsmerjevalnik.get(
+  '/povzetek',
+  jeAvtoriziran,
+  jeAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const narocila = await Narocilo.aggregate([
+      {
+        $group: {
+          _id: null,
+          steviloNarocil: { $sum: 1 },
+          skupnaProdaja: { $sum: '$koncnaCena' },
+        },
+      },
+    ]);
+    const uporabniki = await Uporabnik.aggregate([
+      {
+        $group: {
+          _id: null,
+          steviloUporabnikov: { $sum: 1 },
+        },
+      },
+    ]);
+    const dnevnaNarocila = await Narocilo.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: '%d.%m.%Y', date: '$createdAt' } },
+          narocila: { $sum: 1 },
+          prodaja: { $sum: '$koncnaCena' },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+    const kategorijeIzdelkov = await Izdelek.aggregate([
+      {
+        $group: {
+          _id: '$kategorijaIzdelka',
+          stevec: { $sum: 1 },
+        },
+      },
+    ]);
+    res.send({ uporabniki, narocila, dnevnaNarocila, kategorijeIzdelkov });
   })
 );
 

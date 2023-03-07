@@ -31,3 +31,11 @@ export const jeAvtoriziran = (req, res, next) => {
     res.status(401).send({ message: 'Ni tokena' });
   }
 };
+
+export const jeAdmin = (req, res, next) => {
+  if (req.uporabnik && req.uporabnik.praviceAdmina) {
+    next();
+  } else {
+    res.status(401).send({ message: 'Napaka admin token-a' });
+  }
+};
