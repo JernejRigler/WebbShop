@@ -214,7 +214,7 @@ function App() {
         </main>
         <footer>
           <div className="text-center">
-            Copyright © 2023 Spletna trgovina WebbShop.
+            Jernej Rigler R4D - 2023 Spletna trgovina WebbShop.
           </div>
         </footer>
       </div>
