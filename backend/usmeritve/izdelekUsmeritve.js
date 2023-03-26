@@ -1,7 +1,7 @@
 import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Izdelek from '../modeli/izdelekModel.js';
-import { jeAvtoriziran } from '../utils.js';
+import { jeAdmin, jeAvtoriziran } from '../utils.js';
 
 const izdelekUsmerjevalnik = express.Router();
 
@@ -43,6 +43,28 @@ izdelekUsmerjevalnik.post(
 );
 
 const PAGE_SIZE = 10;
+
+izdelekUsmerjevalnik.get(
+  '/admin',
+  jeAvtoriziran,
+  jeAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const { query } = req;
+    const stran = query.stran || 1;
+    const pageSize = query.pageSize || PAGE_SIZE;
+    const izdelki = await Izdelek.find()
+      .skip(pageSize * (stran - 1))
+      .limit(pageSize);
+    const steviloIzdelkov = await Izdelek.countDocuments();
+    res.send({
+      izdelki,
+      steviloIzdelkov,
+      stran,
+      strani: Math.ceil(steviloIzdelkov / pageSize),
+    });
+  })
+);
+
 izdelekUsmerjevalnik.get(
   '/isci',
   expressAsyncHandler(async (req, res) => {

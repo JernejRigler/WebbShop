@@ -26,6 +26,7 @@ import ZasciteneUsmeritve from './Komponente/ZasciteneUsmeritve';
 import NadzornaPloscaStran from './Stran/NadzornaPloscaStran';
 import AdminUsmeritev from './Komponente/AdminUsmeritev';
 import StranRacuna from './Stran/StranRacuna';
+import UpravljanjeIzdelkovStran from './Stran/UpravljanjeIzdelkovStran';
 
 function App() {
   const { stanje, nalozi: ctxNalozi } = useContext(Shramba);
@@ -165,7 +166,6 @@ function App() {
             ))}
           </Nav>
         </div>
-        <div></div>
         <main>
           <Container>
             <Routes>
@@ -207,6 +207,14 @@ function App() {
                 element={
                   <AdminUsmeritev>
                     <NadzornaPloscaStran />
+                  </AdminUsmeritev>
+                }
+              />
+              <Route
+                path="/admin/nadzorIzdelkov"
+                element={
+                  <AdminUsmeritev>
+                    <UpravljanjeIzdelkovStran />
                   </AdminUsmeritev>
                 }
               />
