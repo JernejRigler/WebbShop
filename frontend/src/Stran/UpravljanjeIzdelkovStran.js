@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import dobiError from '../Errorji';
 import Nalaganje from '../Komponente/Nalaganje';
 import Sporocilo from '../Komponente/Sporocilo';
 import { Shramba } from '../Shramba';
 import { LinkContainer } from 'react-router-bootstrap';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 const reducer = (stanje, akcija) => {
@@ -24,18 +26,27 @@ const reducer = (stanje, akcija) => {
     case 'FETCH_FAIL': {
       return { ...stanje, nalaganje: false, error: akcija.payload };
     }
+    case 'CREATE_REQUEST':
+      return { ...stanje, nalaganjeUstvari: true };
+    case 'CREATE_SUCCESS':
+      return { ...stanje, nalaganjeUstvari: false };
+    case 'CREATE_FAIL':
+      return { ...stanje, nalaganjeUstvari: false };
+
     default:
       return stanje;
   }
 };
 
 export default function UpravljanjeIzdelkovStran() {
-  const [{ nalaganje, error, izdelki, strani }, nalozi] = useReducer(reducer, {
-    nalaganje: true,
-    error: '',
-  });
+  const [{ nalaganje, error, izdelki, strani, nalaganjeUstvari }, nalozi] =
+    useReducer(reducer, {
+      nalaganje: true,
+      error: '',
+    });
 
-  const { search, pathname } = useLocation();
+  const navigiraj = useNavigate();
+  const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const stran = sp.get('stran') || 1;
 
@@ -55,6 +66,26 @@ export default function UpravljanjeIzdelkovStran() {
     };
     fetchData();
   }, [podatkiUporabnika, stran]);
+
+  const ustvariHandler = async () => {
+    if (window.confirm('Želite ustvariti nov izdelek?')) {
+      try {
+        nalozi({ tip: 'CREATE_REQUEST' });
+        const { data } = await axios.post(
+          '/api/izdelki',
+          {},
+          { headers: { authorization: `Bearer ${podatkiUporabnika.token}` } }
+        );
+        alert('Izdelek ustvarjen uspešno');
+        nalozi({ tip: 'CREATE_SUCCESS' });
+        navigiraj(`/admin/izdelek/${data.izdelek._id}`);
+      } catch (err) {
+        alert(dobiError(err));
+        nalozi({ tip: 'CREATE_FAIL' });
+      }
+    }
+  };
+
   return (
     <div>
       <Helmet>
@@ -82,13 +113,14 @@ export default function UpravljanjeIzdelkovStran() {
                 <tr key={izdelek._id}>
                   <td>{izdelek._id}</td>
                   <td>{izdelek.imeIzdelka}</td>
-                  <td>{izdelek.cena}</td>
+                  <td>{izdelek.cena}€</td>
                   <td>{izdelek.kategorijaIzdelka}</td>
                   <td>{izdelek.znamka}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+
           <div>
             {[...Array(strani).keys()].map((x) => (
               <LinkContainer
@@ -108,6 +140,16 @@ export default function UpravljanjeIzdelkovStran() {
               </LinkContainer>
             ))}
           </div>
+          <Row>
+            <Col className="col text-end">
+              <div>
+                <Button type="button" onClick={ustvariHandler}>
+                  Ustvari nov izdelek
+                </Button>
+              </div>
+              {nalaganjeUstvari && <Nalaganje></Nalaganje>}
+            </Col>
+          </Row>
         </>
       )}
     </div>

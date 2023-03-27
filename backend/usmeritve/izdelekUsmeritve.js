@@ -42,6 +42,28 @@ izdelekUsmerjevalnik.post(
   })
 );
 
+izdelekUsmerjevalnik.post(
+  '/',
+  jeAvtoriziran,
+  jeAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const novIzdelek = new Izdelek({
+      imeIzdelka: 'primer' + Date.now(),
+      alt: 'primer-' + Date.now(),
+      slika: '/slike/slika1.jpg',
+      cena: 0,
+      kategorijaIzdelka: 'primer',
+      znamka: 'primer',
+      zaloga: 0,
+      ocena: 0,
+      steviloOcen: 0,
+      opis: 'primer',
+    });
+    const izdelek = await novIzdelek.save();
+    res.send({ message: 'Izdelek ustvarjen', izdelek });
+  })
+);
+
 const PAGE_SIZE = 10;
 
 izdelekUsmerjevalnik.get(
