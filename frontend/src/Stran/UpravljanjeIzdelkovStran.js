@@ -106,6 +106,7 @@ export default function UpravljanjeIzdelkovStran() {
                 <th>Cena</th>
                 <th>Kategorija</th>
                 <th>Znamka</th>
+                <th>Upravljanje</th>
               </tr>
             </thead>
             <tbody>
@@ -116,6 +117,14 @@ export default function UpravljanjeIzdelkovStran() {
                   <td>{izdelek.cena}€</td>
                   <td>{izdelek.kategorijaIzdelka}</td>
                   <td>{izdelek.znamka}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      onClick={() => navigiraj(`/admin/izdelek/${izdelek._id}`)}
+                    >
+                      Uredi
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
