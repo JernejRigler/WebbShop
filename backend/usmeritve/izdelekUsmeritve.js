@@ -64,6 +64,29 @@ izdelekUsmerjevalnik.post(
   })
 );
 
+izdelekUsmerjevalnik.put(
+  '/:id',
+  jeAvtoriziran,
+  jeAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const izdelekId = req.params.id;
+    const izdelek = await Izdelek.findById(izdelekId);
+    if (izdelek) {
+      izdelek.imeIzdelka = req.body.imeIzdelka;
+      izdelek.cena = req.body.cena;
+      izdelek.slika = req.body.slika;
+      izdelek.kategorijaIzdelka = req.body.kategorijaIzdelka;
+      izdelek.zaloga = req.body.zaloga;
+      izdelek.znamka = req.body.znamka;
+      izdelek.opis = req.body.opis;
+      izdelek.alt = req.body.alt;
+      await izdelek.save();
+      res.send({ message: 'Izdelek posodobljen' });
+    } else {
+      res.status(404).send({ message: 'Izdelek ni bil najden' });
+    }
+  })
+);
 const PAGE_SIZE = 10;
 
 izdelekUsmerjevalnik.get(

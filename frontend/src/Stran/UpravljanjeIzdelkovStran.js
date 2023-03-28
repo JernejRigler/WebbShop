@@ -76,7 +76,7 @@ export default function UpravljanjeIzdelkovStran() {
           {},
           { headers: { authorization: `Bearer ${podatkiUporabnika.token}` } }
         );
-        alert('Izdelek ustvarjen uspešno');
+        alert('Izdelek uspešno ustvarjen');
         nalozi({ tip: 'CREATE_SUCCESS' });
         navigiraj(`/admin/izdelek/${data.izdelek._id}`);
       } catch (err) {

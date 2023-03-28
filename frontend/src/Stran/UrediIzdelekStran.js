@@ -18,6 +18,12 @@ const reducer = (stanje, akcija) => {
       return { ...stanje, nalaganje: false };
     case 'FETCH_FAIL':
       return { ...stanje, nalaganje: false, error: akcija.payload };
+    case 'UPDATE_REQUEST':
+      return { ...stanje, nalaganjePosodobi: true };
+    case 'UPDATE_SUCCESS':
+      return { ...stanje, nalaganjePosodobi: false };
+    case 'UPDATE_FAIL':
+      return { ...stanje, nalaganjePosodobi: false };
     default:
       return stanje;
   }
@@ -29,11 +35,15 @@ export default function UrediIzdelekStran() {
 
   const params = useParams();
   const { id: izdelekId } = params;
+  const navigiraj = useNavigate();
 
-  const [{ nalaganje, error }, nalozi] = useReducer(reducer, {
-    nalaganje: true,
-    error: '',
-  });
+  const [{ nalaganje, error, nalaganjePosodobi }, nalozi] = useReducer(
+    reducer,
+    {
+      nalaganje: true,
+      error: '',
+    }
+  );
 
   const [imeIzdelka, nastaviImeIzdelka] = useState('');
   const [alt, nastaviAlt] = useState('');
@@ -68,6 +78,37 @@ export default function UrediIzdelekStran() {
     fetchData();
   }, [izdelekId]);
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      nalozi({ tip: 'UPDATE_REQUEST' });
+      await axios.put(
+        `/api/izdelki/${izdelekId}`,
+        {
+          _id: izdelekId,
+          imeIzdelka,
+          alt,
+          cena,
+          slika,
+          kategorijaIzdelka,
+          znamka,
+          zaloga,
+          opis,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${podatkiUporabnika.token}`,
+          },
+        }
+      );
+      nalozi({ tip: 'UPDATE_SUCCESS' });
+      alert('Izdelek uspešno posodobljen');
+      navigiraj('/admin/nadzorIzdelkov');
+    } catch (err) {
+      alert(dobiError(err));
+      nalozi({ tip: 'UPDATE_FAIL' });
+    }
+  };
   return (
     <Container className="prijavniObrazec">
       <Helmet>
@@ -79,7 +120,7 @@ export default function UrediIzdelekStran() {
       ) : error ? (
         <Sporocilo tip="danger">{error}</Sporocilo>
       ) : (
-        <Form>
+        <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="imeIzdelka">
             <Form.Label>Ime</Form.Label>
             <Form.Control
@@ -145,8 +186,11 @@ export default function UrediIzdelekStran() {
             ></Form.Control>
           </Form.Group>
           <div className="mb-3">
-            <Button type="submit">Uredi izdelek</Button>
+            <Button disabled={nalaganjePosodobi} type="submit">
+              Uredi izdelek
+            </Button>
           </div>
+          {nalaganjePosodobi && <Nalaganje></Nalaganje>}
         </Form>
       )}
     </Container>
