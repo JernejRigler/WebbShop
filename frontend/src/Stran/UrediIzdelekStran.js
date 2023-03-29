@@ -24,6 +24,12 @@ const reducer = (stanje, akcija) => {
       return { ...stanje, nalaganjePosodobi: false };
     case 'UPDATE_FAIL':
       return { ...stanje, nalaganjePosodobi: false };
+    case 'UPLOAD_REQUEST':
+      return { ...stanje, nalaganjeUpload: true, errorUpload: '' };
+    case 'UPLOAD_SUCCESS':
+      return { ...stanje, nalaganjeUpload: false, errorUpload: '' };
+    case 'UPLOAD_FAIL':
+      return { ...stanje, nalaganjeUpload: false, errorUpload: akcija.payload };
     default:
       return stanje;
   }
@@ -37,13 +43,11 @@ export default function UrediIzdelekStran() {
   const { id: izdelekId } = params;
   const navigiraj = useNavigate();
 
-  const [{ nalaganje, error, nalaganjePosodobi }, nalozi] = useReducer(
-    reducer,
-    {
+  const [{ nalaganje, error, nalaganjePosodobi, nalaganjeUpload }, nalozi] =
+    useReducer(reducer, {
       nalaganje: true,
       error: '',
-    }
-  );
+    });
 
   const [imeIzdelka, nastaviImeIzdelka] = useState('');
   const [alt, nastaviAlt] = useState('');
@@ -109,6 +113,27 @@ export default function UrediIzdelekStran() {
       nalozi({ tip: 'UPDATE_FAIL' });
     }
   };
+
+  const naloziDatotekoHandler = async (e) => {
+    const datoteka = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', datoteka);
+    try {
+      nalozi({ tip: 'UPLOAD_REQUEST' });
+      const { data } = await axios.post('/api/nalozi', bodyFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${podatkiUporabnika.token}`,
+        },
+      });
+      nalozi({ tip: 'UPLOAD_SUCCESS' });
+      alert('Slika uspešno naložena');
+      nastaviSliko(data.secure_url);
+    } catch (err) {
+      alert(dobiError(err));
+      nalozi({ tip: 'UPLOAD_FAIL', payload: dobiError(err) });
+    }
+  };
   return (
     <Container className="prijavniObrazec">
       <Helmet>
@@ -144,6 +169,14 @@ export default function UrediIzdelekStran() {
               onChange={(e) => nastaviSliko(e.target.value)}
               required
             ></Form.Control>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="slikaDatoteka">
+            <Form.Label>Naloži datoteko</Form.Label>
+            <Form.Control
+              type="file"
+              onChange={naloziDatotekoHandler}
+            ></Form.Control>
+            {nalaganjeUpload && <Nalaganje></Nalaganje>}
           </Form.Group>
           <Form.Group className="mb-3" controlId="znamka">
             <Form.Label>Znamka</Form.Label>

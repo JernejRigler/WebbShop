@@ -6,6 +6,7 @@ import seedUsmerjevalnik from './usmeritve/seedUsmeritve.js';
 import izdelekUsmerjevalnik from './usmeritve/izdelekUsmeritve.js';
 import uporabnikUsmerjevalnik from './usmeritve/uporabnikUsmeritve.js';
 import narociloUsmerjevalnik from './usmeritve/narociloUsmeritve.js';
+import nalaganjeUsmerjevalnik from './usmeritve/nalaganjeUsmeritve.js';
 
 dotenv.config();
 
@@ -30,6 +31,8 @@ app.use('/api/izdelki', izdelekUsmerjevalnik);
 app.use('/api/uporabniki', uporabnikUsmerjevalnik);
 
 app.use('/api/narocila', narociloUsmerjevalnik);
+
+app.use('/api/nalozi', nalaganjeUsmerjevalnik);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, '/frontend/build')));
