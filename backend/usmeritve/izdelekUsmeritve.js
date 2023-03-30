@@ -87,6 +87,23 @@ izdelekUsmerjevalnik.put(
     }
   })
 );
+
+izdelekUsmerjevalnik.delete(
+  '/:id',
+  jeAvtoriziran,
+  jeAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const izdelekId = req.params.id;
+    const izdelek = await Izdelek.findById(izdelekId);
+    if (izdelek) {
+      await izdelek.remove();
+      res.send({ message: 'Izdelek uspesno izbrisan' });
+    } else {
+      res.status(404).send({ message: 'Izdelek ni bil najden' });
+    }
+  })
+);
+
 const PAGE_SIZE = 10;
 
 izdelekUsmerjevalnik.get(

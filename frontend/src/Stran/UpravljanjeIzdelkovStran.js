@@ -32,6 +32,14 @@ const reducer = (stanje, akcija) => {
       return { ...stanje, nalaganjeUstvari: false };
     case 'CREATE_FAIL':
       return { ...stanje, nalaganjeUstvari: false };
+    case 'DELETE_REQUEST':
+      return { ...stanje, nalaganjeIzbrisi: true, uspesnoIzbrisano: false };
+    case 'DELETE_SUCCESS':
+      return { ...stanje, nalaganjeIzbrisi: false, uspesnoIzbrisano: true };
+    case 'DELETE_FAIL':
+      return { ...stanje, nalaganjeIzbrisi: false, uspesnoIzbrisano: false };
+    case 'DELETE_RESET':
+      return { ...stanje, nalaganjeIzbrisi: false, uspesnoIzbrisano: false };
 
     default:
       return stanje;
@@ -39,11 +47,21 @@ const reducer = (stanje, akcija) => {
 };
 
 export default function UpravljanjeIzdelkovStran() {
-  const [{ nalaganje, error, izdelki, strani, nalaganjeUstvari }, nalozi] =
-    useReducer(reducer, {
-      nalaganje: true,
-      error: '',
-    });
+  const [
+    {
+      nalaganje,
+      error,
+      izdelki,
+      strani,
+      nalaganjeUstvari,
+      nalaganjeIzbrisi,
+      uspesnoIzbrisano,
+    },
+    nalozi,
+  ] = useReducer(reducer, {
+    nalaganje: true,
+    error: '',
+  });
 
   const navigiraj = useNavigate();
   const { search } = useLocation();
@@ -64,8 +82,12 @@ export default function UpravljanjeIzdelkovStran() {
         nalozi({ tip: 'FETCH_FAIL', payload: dobiError(err) });
       }
     };
-    fetchData();
-  }, [podatkiUporabnika, stran]);
+    if (uspesnoIzbrisano) {
+      nalozi({ tip: 'DELETE_RESET' });
+    } else {
+      fetchData();
+    }
+  }, [podatkiUporabnika, stran, uspesnoIzbrisano]);
 
   const ustvariHandler = async () => {
     if (window.confirm('Želite ustvariti nov izdelek?')) {
@@ -85,7 +107,21 @@ export default function UpravljanjeIzdelkovStran() {
       }
     }
   };
-
+  const izbrisiHandler = async (izdelek) => {
+    if (window.confirm('Ste prepričani, da želite izbrisati ta izdelek?')) {
+      try {
+        nalozi({ tip: 'DELETE_REQUEST' });
+        await axios.delete(`/api/izdelki/${izdelek._id}`, {
+          headers: { authorization: `Bearer ${podatkiUporabnika.token}` },
+        });
+        alert('Izdelek uspešno izbrisan');
+        nalozi({ tip: 'DELETE_SUCCESS' });
+      } catch (err) {
+        alert(dobiError(err));
+        nalozi({ tip: 'DELETE_FAIL' });
+      }
+    }
+  };
   return (
     <div>
       <Helmet>
@@ -123,6 +159,12 @@ export default function UpravljanjeIzdelkovStran() {
                       onClick={() => navigiraj(`/admin/izdelek/${izdelek._id}`)}
                     >
                       Uredi
+                    </Button>{' '}
+                    <Button
+                      type="button"
+                      onClick={() => izbrisiHandler(izdelek)}
+                    >
+                      Izbriši
                     </Button>
                   </td>
                 </tr>
@@ -157,6 +199,7 @@ export default function UpravljanjeIzdelkovStran() {
                 </Button>
               </div>
               {nalaganjeUstvari && <Nalaganje></Nalaganje>}
+              {nalaganjeIzbrisi && <Nalaganje></Nalaganje>}
             </Col>
           </Row>
         </>
