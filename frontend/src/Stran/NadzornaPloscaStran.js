@@ -23,6 +23,12 @@ const reducer = (stanje, akcija) => {
   }
 };
 
+const obrniDatum = (datum) => {
+  const razbij = datum.split('.');
+  const novDatum = razbij[2] + '.' + razbij[1] + '.' + razbij[0];
+  return novDatum;
+};
+
 export default function NadzornaPloscaStran() {
   const [{ nalaganje, povzetek, error }, nalozi] = useReducer(reducer, {
     nalaganje: true,
@@ -108,7 +114,10 @@ export default function NadzornaPloscaStran() {
                 loader={<div>Pridobivanje podatkov</div>}
                 data={[
                   ['Datum', 'Prodaje'],
-                  ...povzetek.dnevnaNarocila.map((x) => [x._id, x.prodaja]),
+                  ...povzetek.dnevnaNarocila.map((x) => [
+                    obrniDatum(x._id),
+                    x.prodaja,
+                  ]),
                 ]}
               ></Chart>
             )}

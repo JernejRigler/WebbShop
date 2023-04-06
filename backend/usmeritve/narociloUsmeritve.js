@@ -61,7 +61,7 @@ narociloUsmerjevalnik.get(
     const dnevnaNarocila = await Narocilo.aggregate([
       {
         $group: {
-          _id: { $dateToString: { format: '%d.%m.%Y', date: '$createdAt' } },
+          _id: { $dateToString: { format: '%Y.%m.%d', date: '$createdAt' } },
           narocila: { $sum: 1 },
           prodaja: { $sum: '$koncnaCena' },
         },

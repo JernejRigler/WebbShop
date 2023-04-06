@@ -95,7 +95,7 @@ export default function OddajNarociloStran() {
                 {kosarica.izdelkiKosarice.map((izdelek) => (
                   <ListGroup.Item key={izdelek._id}>
                     <Row className="align-items-center">
-                      <Col md={5}>
+                      <Col md={10}>
                         <img
                           src={izdelek.slika}
                           alt={izdelek.imeIzdelka}
