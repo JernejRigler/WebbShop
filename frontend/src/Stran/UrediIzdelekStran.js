@@ -84,6 +84,22 @@ export default function UrediIzdelekStran() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(cena);
+    if (String(cena).split('.')[1]?.length > 2) {
+      alert(
+        'Cena ima lahko največ 2 decimalni mesti, preštetih ' +
+          String(cena).split('.')[1]?.length +
+          '.'
+      );
+      return;
+    } else if (String(cena).split('.').length > 2) {
+      alert('Cena ne more imeti več pik');
+      return;
+    }
+    if (zaloga % 1 !== 0) {
+      alert('Zaloga mora biti celo število.');
+      return;
+    }
     try {
       nalozi({ tip: 'UPDATE_REQUEST' });
       await axios.put(
@@ -207,6 +223,7 @@ export default function UrediIzdelekStran() {
             <Form.Control
               value={cena}
               onChange={(e) => nastaviCeno(e.target.value)}
+              type="number"
               required
             ></Form.Control>
           </Form.Group>
@@ -215,6 +232,7 @@ export default function UrediIzdelekStran() {
             <Form.Control
               value={zaloga}
               onChange={(e) => nastaviZalogo(e.target.value)}
+              type="number"
               required
             ></Form.Control>
           </Form.Group>
