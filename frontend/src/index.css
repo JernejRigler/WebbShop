@@ -90,22 +90,3 @@ navbar-brand {
   border-color: white;
   box-shadow: 0 0 0 0rem white;
 }
-/*.imeCena {
-  transition: background-color 0.3s;
-}
-
-.izdelek:hover > .imeCena {
-  background-color: aliceblue;
-}
-
-.imeCena > a {
-  text-decoration: none;
-  transition: color 0.3s;
-}
-.imeCena > a:link,
-.imeCena > a:hover {
-  color: black;
-}
-.imeCena > a:hover {
-  color: slategray;
-}*/
