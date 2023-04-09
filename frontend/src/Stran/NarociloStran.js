@@ -10,6 +10,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import PDF from '../Komponente/PDF';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import Button from 'react-bootstrap/Button';
 
 function reducer(stanje, akcija) {
   switch (akcija.tip) {
@@ -96,7 +99,7 @@ export default function NarociloStran() {
                         </Link>
                       </Col>
                       <Col md={1}>{izdelek.kolicina}</Col>
-                      <Col md={1}>{izdelek.cena}</Col>
+                      <Col md={1}>{izdelek.cena} €</Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
@@ -146,6 +149,12 @@ export default function NarociloStran() {
           </Card>
         </Col>
       </Row>
+      <PDFDownloadLink
+        document={<PDF narocilo={narocilo} narociloID={narociloID} />}
+        filename="FORM"
+      >
+        <Button type="button">Naloži PDF računa</Button>
+      </PDFDownloadLink>
     </div>
   );
 }
