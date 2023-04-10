@@ -121,7 +121,7 @@ export default function StranDostave() {
             options={postneStevilkeKraji}
             onChange={(choice) => nastaviKraj(choice)}
             isSearchable
-            defaultValue={{ value: kraj, label: kraj }}
+            defaultValue={kraj !== '' ? { value: kraj, label: kraj } : null}
             required
           />
         </Row>
