@@ -114,7 +114,7 @@ export default function NarociloStran() {
                 <br />
                 {narocilo.dostava.ulicaHisnaStevilka}
                 <br />
-                {narocilo.dostava.posta} {narocilo.dostava.kraj}
+                {narocilo.dostava.kraj}
                 <br />
               </Card.Text>
             </Card.Body>

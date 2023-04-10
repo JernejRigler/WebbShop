@@ -123,7 +123,7 @@ export default function OddajNarociloStran() {
                 <br />
                 {kosarica.dostava.ulicaHisnaStevilka}
                 <br />
-                {kosarica.dostava.posta} {kosarica.dostava.kraj}
+                {kosarica.dostava.kraj}
                 <br />
               </Card.Text>
               <Link to="/dostava">Spremeni podatke dostave</Link>

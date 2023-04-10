@@ -81,9 +81,7 @@ const PDF = (poslano) => {
           {narocilo.dostava.ime} {narocilo.dostava.priimek}
         </Text>
         <Text style={stili.tekst}>{narocilo.dostava.ulicaHisnaStevilka}</Text>
-        <Text style={stili.tekst}>
-          {narocilo.dostava.posta} {narocilo.dostava.kraj}
-        </Text>
+        <Text style={stili.tekst}>{narocilo.dostava.kraj}</Text>
         <Text style={stili.podnaslov}>Podatki o plačilu:</Text>
         <Text style={stili.tekst}>
           {narocilo.nacinPlacila === 'placiloPoPovzetju'

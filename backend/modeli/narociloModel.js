@@ -20,7 +20,6 @@ const shemaNarocila = new mongoose.Schema(
       ime: { type: String, required: true },
       priimek: { type: String, required: true },
       ulicaHisnaStevilka: { type: String, required: true },
-      posta: { type: String, required: true },
       kraj: { type: String, required: true },
     },
     nacinPlacila: { type: String, required: true },

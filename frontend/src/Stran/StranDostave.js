@@ -7,7 +7,8 @@ import Col from 'react-bootstrap/Col';
 import { useNavigate } from 'react-router-dom';
 import { Shramba } from '../Shramba';
 import KorakiBlagajne from '../Komponente/KorakiBlagajne';
-import dataKraji from '../dataKraji';
+import postneStevilkeKraji from '../dataKraji';
+import Select from 'react-select';
 
 export default function StranDostave() {
   const navigiraj = useNavigate();
@@ -23,7 +24,7 @@ export default function StranDostave() {
   const [ulicaHisnaStevilka, nastaviUlicaHisnaStevilka] = useState(
     dostava.ulicaHisnaStevilka || ''
   );
-  const [posta, nastaviPosta] = useState(dostava.posta || '');
+  //const [posta, nastaviPosta] = useState(dostava.posta || '');
   const [kraj, nastaviKraj] = useState(dostava.kraj || '');
   useEffect(() => {
     if (!podatkiUporabnika) {
@@ -38,8 +39,7 @@ export default function StranDostave() {
         ime,
         priimek,
         ulicaHisnaStevilka,
-        posta,
-        kraj,
+        kraj: kraj.value,
       },
     });
     localStorage.setItem(
@@ -48,8 +48,7 @@ export default function StranDostave() {
         ime,
         priimek,
         ulicaHisnaStevilka,
-        posta,
-        kraj,
+        kraj: kraj.value,
       })
     );
     navigiraj('/placilo');
@@ -89,23 +88,41 @@ export default function StranDostave() {
             required
           />
         </Form.Group>
+
+        {/*
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="posta">
+              <Form.Label>Poštna številka</Form.Label>
+              <Form.Control
+                value={posta}
+                onChange={(e) => nastaviPosta(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="kraj">
+              <Form.Label>Kraj</Form.Label>
+              <Form.Control
+                value={kraj}
+                onChange={(e) => nastaviKraj(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Row>
+  */}
+
         <Row className="mb-3">
-          <Form.Group as={Col} controlId="posta">
-            <Form.Label>Poštna številka</Form.Label>
-            <Form.Control
-              value={posta}
-              onChange={(e) => nastaviPosta(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <Form.Group as={Col} controlId="kraj">
-            <Form.Label>Kraj</Form.Label>
-            <Form.Control
-              value={kraj}
-              onChange={(e) => nastaviKraj(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <label id="kraj" htmlFor="kraj">
+            Izberi kraj
+          </label>
+          <Select
+            aria-labelledby="kraj"
+            inputId="kraj"
+            name="kraj"
+            options={postneStevilkeKraji}
+            onChange={(choice) => nastaviKraj(choice)}
+            isSearchable
+            defaultValue={{ value: kraj, label: kraj }}
+          />
         </Row>
         <div className="mb-3">
           <Button variant="primary" type="submit">
@@ -113,9 +130,6 @@ export default function StranDostave() {
           </Button>
         </div>
       </Form>
-      {dataKraji.postneStevilkeKraji.map((kraj) => (
-        <div>{kraj.krajPosta}</div>
-      ))}
     </div>
   );
 }
