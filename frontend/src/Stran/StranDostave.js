@@ -122,6 +122,7 @@ export default function StranDostave() {
             onChange={(choice) => nastaviKraj(choice)}
             isSearchable
             defaultValue={{ value: kraj, label: kraj }}
+            required
           />
         </Row>
         <div className="mb-3">
