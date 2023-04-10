@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import { useNavigate } from 'react-router-dom';
 import { Shramba } from '../Shramba';
 import KorakiBlagajne from '../Komponente/KorakiBlagajne';
+import dataKraji from '../dataKraji';
 
 export default function StranDostave() {
   const navigiraj = useNavigate();
@@ -112,6 +113,9 @@ export default function StranDostave() {
           </Button>
         </div>
       </Form>
+      {dataKraji.postneStevilkeKraji.map((kraj) => (
+        <div>{kraj.krajPosta}</div>
+      ))}
     </div>
   );
 }

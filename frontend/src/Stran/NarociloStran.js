@@ -151,7 +151,7 @@ export default function NarociloStran() {
       </Row>
       <PDFDownloadLink
         document={<PDF narocilo={narocilo} narociloID={narociloID} />}
-        filename="FORM"
+        filename="Račun"
       >
         <Button type="button">Naloži PDF računa</Button>
       </PDFDownloadLink>
